@@ -1,4 +1,3 @@
 Anagramatron
 ============
-
-Anagramatron 9000
+You get the idea.
