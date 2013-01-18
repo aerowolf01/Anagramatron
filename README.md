@@ -1,3 +1,2 @@
-Anagramatron
+Anagramatron.rb
 ============
-You get the idea.
