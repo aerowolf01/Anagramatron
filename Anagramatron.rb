@@ -7,8 +7,8 @@ class Anagram_list
     # TODO: First: add_file, add. Then add: error handling, list metadata.
     
     if file_name == nil
-      list = Hash.new { [] }# getting lots of problems with this.
-#    elsif File.exists? file_name
+      list = Hash.new { |hash, key| hash[key] = [] } # Epic ruby bug was here, more in readme
+    elsif File.exists? file_name
 #      @list = File.open(file_name).read.each_line do |line|
     else
         raise "#{file_name} is not a valid file!"
