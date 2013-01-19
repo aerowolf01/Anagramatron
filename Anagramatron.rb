@@ -2,6 +2,7 @@
 
 # Author: Cooper LeBrun
 # Email: cooperlebrun@gmail.com
+# need a bigger word list
 
 class AnagramList < Hash
   # I don't know If I can do sub-words if dictionaries don't have orders.
@@ -21,15 +22,24 @@ class AnagramList < Hash
   
   attr_reader :list
 
-  def parse_file(file)
+  def parse_file(file, formatted = true)
     # Entry lines are in the form of
     # alphagram and a space in between each word which has a matching alphagram
     # obviously the above example's matches weren't actually matches, but you get the idea
     # alphagrams are always the first word
-    File.open(file_name).read.each_line do |line|
+    if formatted
+      File.open(file_name).read.each_line do |line|
         line = line.scan(/\w+/)
-        @list[line.shift] += line
+        ag = line.shift
+        for word in line
+          @list[ag] += word if not @list[ag].include? word
+        end
       end
+    elsif not formatted
+      # formats a file, use with save.
+      # Only works on files with one word per line.
+    File.open(file).read.each_line do |word|
+      @list[alphagram(word.chomp)] += [word.chomp] if not @list[alphagram(word.chomp)].include? word.chomp
   end
 
   def alphagram(word)
@@ -51,13 +61,6 @@ class AnagramList < Hash
   def add(word)
     # just for a single word
     @list[alphagram(word)] += [word]
-  end
-
-  def add_file(file)
-    # Only works on files with one word per line.
-    File.open(file).read.each_line do |word|
-      @list[alphagram(word.chomp)] += [word.chomp]
-    end
   end
 
   def keys()
