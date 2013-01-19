@@ -2,7 +2,6 @@
 
 # Author: Cooper LeBrun
 # Email: cooperlebrun@gmail.com
-# need a bigger word list
 
 class AnagramList < Hash
   # I don't know If I can do sub-words if dictionaries don't have orders.
@@ -15,12 +14,21 @@ class AnagramList < Hash
         line = line.scan(/\w+/)
         @list[line.shift] += line
       end
+      @keysort = @list.keys.sort
     elsif @file_name != nil
       raise "#{@file_name} is not a valid file name!"
     end
   end
   
   attr_reader :list
+
+  def alphagram(word)
+    # an alphagram is a word rearranged so its letters are in alphabetical order. for example: aeelmpx
+    word.scan(/[A-Z, a-z]/).sort.join.downcase
+  end
+
+  def includes? word
+    @list[alphagram(word)].include? word
 
   def parse_file(file, formatted = true)
     # Entry lines are in the form of
@@ -32,39 +40,38 @@ class AnagramList < Hash
         line = line.scan(/\w+/)
         ag = line.shift
         for word in line
-          @list[ag] += word if not @list[ag].include? word
+          @list[ag] += word if not includes? word
         end
       end
     elsif not formatted
       # formats a file, use with save.
       # Only works on files with one word per line.
     File.open(file).read.each_line do |word|
-      @list[alphagram(word.chomp)] += [word.chomp] if not @list[alphagram(word.chomp)].include? word.chomp
-  end
-
-  def alphagram(word)
-    # an alphagram is a word rearranged so its letters are in alphabetical order. for example: aeelmpx
-    word.scan(/[A-Z, a-z]/).sort.join.downcase
+      @list[alphagram(word.chomp)] += [word.chomp] if not includes? word.chomp
+      end
+    end
+    @keysort = @list.keys.sort
   end
 
   def save(file = @file_path)
     # should be called before every exit because any anagram the user enters is\
     # added to the list.
+
     listkeys = @list.keys
     f = File.open(file, 'w')
+
     for key in listkeys do
       f.write(key + " " + @list[key].join(" ") + "\n")
     end
+
     f.close
   end
 
-  def add(word)
-    # just for a single word
-    @list[alphagram(word)] += [word]
-  end
 
-  def keys()
-    @list.keys
+
+  def add(word)
+    # not really sure what I could use this for, but maybe someone will find something for this
+    @list[alphagram(word)] += [word] if not @list
   end
 
   def search()
