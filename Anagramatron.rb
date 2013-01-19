@@ -7,6 +7,7 @@ class Anagram_list
     File.open(file_name).read.each_line do |line|
         line = line.scan(/\w+/)
         @list[line.shift] += line
+      end
   end
 
   def initialize(file_name = nil)
@@ -15,7 +16,7 @@ class Anagram_list
     @file_name = file_name
     @list = Hash.new { |hash, key| hash[key] = [] } # Epic ruby bug was here, more in readme
     
-    if @file_name != nil && File.exists? @file_name
+    if (@file_name != nil) && (File.exists? @file_name)
       parse_file(@file_name)
     end
   end
@@ -29,7 +30,7 @@ class Anagram_list
     # after modifying the file in any way it needs to save it.
     listkeys = @list.keys
     f = File.open(file, 'w')
-    for key in listkeys
+    for key in listkeys do
       f.write(key + " " + @list[key].join(" ") + "\n")
     end
     f.close
@@ -39,10 +40,11 @@ class Anagram_list
     @list[alphagram(word)] << word
   end
 
-  def add_file(f_path)
-    # for adding files together
-  end
+#  def add_file(f_path)
+#    # for adding files together
+#  end
 
-  def search()
-    #
-  end
+#  def search()
+#    #
+#  end
+end
