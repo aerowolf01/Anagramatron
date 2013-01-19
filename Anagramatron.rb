@@ -3,31 +3,37 @@
 class Anagram_list
   # Closest word is still possible
 
+  def initialize(file_name = nil)
+    @file_name = file_name
+    @list = Hash.new { |hash, key| hash[key] = [] } # Epic ruby bug was here, more in readme
+    if (@file_name != nil) && (File.exists? @file_name)
+      # See also: parse_file
+      File.open(file_name).read.each_line do |line|
+        line = line.scan(/\w+/)
+        @list[line.shift] += line
+      end
+    end
+  end
+
   def parse_file(file)
+    # Entry lines are in the form of
+    # alphagram and a space in between each word which has a matching alphagram
+    # obviously the above example's matches weren't actually matches, but you get the idea
+    # alphagrams are always the first word
     File.open(file_name).read.each_line do |line|
         line = line.scan(/\w+/)
         @list[line.shift] += line
       end
   end
 
-  def initialize(file_name = nil)
-    # Shouldn't keep a file open, or open in write mode
-    # TODO: First: add_file, add. Then add: error handling, list metadata.
-    @file_name = file_name
-    @list = Hash.new { |hash, key| hash[key] = [] } # Epic ruby bug was here, more in readme
-    
-    if (@file_name != nil) && (File.exists? @file_name)
-      parse_file(@file_name)
-    end
-  end
-
   def alphagram(word)
-    # turn word into its alphagram
+    # an alphagram is a word rearranged so its letters are in alphabetical order. for example: aeelmpx
     word.scan(/[A-z]/).sort.join.downcase
   end
 
   def save(file = @file_path)
-    # after modifying the file in any way it needs to save it.
+    # should be called before every exit because any anagram the user enters is\
+    # added to the list.
     listkeys = @list.keys
     f = File.open(file, 'w')
     for key in listkeys do
@@ -37,14 +43,10 @@ class Anagram_list
   end
 
   def add(word)
-    @list[alphagram(word)] << word
+    @list[alphagram(word)] += [word]
   end
 
-#  def add_file(f_path)
-#    # for adding files together
-#  end
-
-#  def search()
-#    #
-#  end
+  def search()
+    #
+  end
 end
