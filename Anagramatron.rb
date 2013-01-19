@@ -7,15 +7,15 @@ class Anagram_list
     # TODO: First: add_file, add. Then add: error handling, list metadata.
     
     if file_name == nil
-      list = {}
-    elsif File.exists? file_name
-      @list = File.open(file_name).read.each_line do |line|
+      list = Hash.new { [] }# getting lots of problems with this.
+#    elsif File.exists? file_name
+#      @list = File.open(file_name).read.each_line do |line|
     else
         raise "#{file_name} is not a valid file!"
     end
   end
 
-  def alpha_hash(word)
+  def alphagram(word)
     # turn a word into its alpha value
     word.scan(/[A-z]/).sort.join.downcase
   end
@@ -31,7 +31,7 @@ class Anagram_list
 
   def add(word)
     # for individual words
-    @list[alpha_word(word)] << word
+    @list[alphagram(word)] << word# not going to 
     
   end
 
