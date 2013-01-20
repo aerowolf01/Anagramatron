@@ -14,21 +14,22 @@ class AnagramList < Hash
         line = line.scan(/\w+/)
         @list[line.shift] += line
       end
-      @keysort = @list.keys.sort
+      @keys = @list.keys.sort
     elsif @file_name != nil
       raise "#{@file_name} is not a valid file name!"
     end
   end
   
-  attr_reader :list
+  attr_reader :keys
 
   def alphagram(word)
     # an alphagram is a word rearranged so its letters are in alphabetical order. for example: aeelmpx
-    word.scan(/[A-Z, a-z]/).sort.join.downcase
+    @last_ag = word.scan(/[A-Z, a-z]/).sort.join.downcase
   end
 
   def includes? word
     @list[alphagram(word)].include? word
+  end
 
   def parse_file(file, formatted = true)
     # Entry lines are in the form of
@@ -50,7 +51,7 @@ class AnagramList < Hash
       @list[alphagram(word.chomp)] += [word.chomp] if not includes? word.chomp
       end
     end
-    @keysort = @list.keys.sort
+    @keys = @list.keys.sort
   end
 
   def save(file = @file_path)
@@ -67,14 +68,13 @@ class AnagramList < Hash
     f.close
   end
 
-
-
   def add(word)
     # not really sure what I could use this for, but maybe someone will find something for this
     @list[alphagram(word)] += [word] if not @list
   end
 
-  def search()
-    # ????????
+  def anagrams_of(word)
+    { @list[alphagram(word.chomp)] }
   end
 end
+
