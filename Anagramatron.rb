@@ -2,52 +2,31 @@
 
 # Author: Cooper LeBrun
 # Email: cooperlebrun@gmail.com
+# TODO: make sure there are all methods use the string method of alphagram, and not the class method.
+
+class String
+  # Had some of these in the AnagramList class definition, moved them over here.
+  def alphagram
+    # an alphagram is a word rearranged so its letters are in alphabetical order. for example: aeelmpx
+    self.scan(/[A-Z, a-z]/).sort.join.downcase
+  end
+end
+
 
 class AnagramList < Hash
   # Does initialize have to be the first defined class function?
 
-  def initialize(file_path = nil)
-    @file_path = file_path
-    @list = Hash.new { |hash, key| hash[key] = [] } # Epic ruby bug was here, more in readme
-    if (@file_path != nil) && (File.exists? @file_path)
-      # See also: parse_file
-      File.open(file_path).read.each_line do |line|
-        line = line.scan(/\w+/)
-        @list[line.shift] += line
-      end
-      @keys = @list.keys.sort
-    elsif @file_path != nil
-      raise "#{@file_path} is not a valid file name!"
-    end
-  end
-  
-  attr_reader :keys
-  attr_reader :list
-  attr_accessor :file_path
-
-  def alphagram(word)
-    # an alphagram is a word rearranged so its letters are in alphabetical order. for example: aeelmpx
-    word.scan(/[A-Z, a-z]/).sort.join.downcase
-  end
-
-  def includes? word
-    @list[alphagram(word)].include? word
-  end
-
-  def parse_file(file, formatted = true)
+  def parse_file(file, formatted = false)
     # Entry lines are in the form of;
     # "alphagram and a space in between each word which has a matching alphagram"
     # obviously the above example's matches weren't actually matches, but you get the idea
-    # kind of redundant to rewrite this in initialize...
+    # kind of redundant to rewrite this in initialize... FIGURE IT OUT
 
     if formatted
       # only works with files that have been saved after using this with formatted = false
       File.open(file).read.each_line do |line|
         line = line.scan(/\w+/)
-        ag = line.shift
-        for word in line
-          @list[ag] += word if not includes? word
-        end
+        @list[line.shift] += line
       end
 
     elsif not formatted
@@ -58,6 +37,26 @@ class AnagramList < Hash
       end
     end
     @keys = @list.keys.sort
+  end
+
+
+  def initialize(file_path = nil, format = true)
+    @file_path = file_path
+    @list = Hash.new { |hash, key| hash[key] = [] } # Epic ruby bug was here, more in readme
+    if (@file_path != nil) && (File.exists? @file_path)
+      parse_file(@file_path, format)
+    elsif @file_path != nil
+      raise "#{@file_path} is not a valid file name!"
+    end
+  end
+  
+  attr_reader :keys
+  attr_reader :list
+  attr_accessor :file_path
+
+  def includes? word
+    # do I use this anywhere?
+    @list[alphagram(word)].include? word
   end
 
   def save(file = @file_path)
