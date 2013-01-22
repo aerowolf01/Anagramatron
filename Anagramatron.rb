@@ -14,13 +14,11 @@ end
 
 
 class AnagramList < Hash
-  # Does initialize have to be the first defined class function?
 
   def parse_file(file, formatted = false)
     # Entry lines are in the form of;
     # "alphagram and a space in between each word which has a matching alphagram"
     # obviously the above example's matches weren't actually matches, but you get the idea
-    # kind of redundant to rewrite this in initialize... FIGURE IT OUT
 
     if formatted
       # only works with files that have been saved after using this with formatted = false
@@ -33,7 +31,7 @@ class AnagramList < Hash
       # formats a file, use with save.
       # Only works on files with one word per line.
     File.open(file).read.each_line do |word|
-      @list[alphagram(word.chomp)] += [word.chomp] if not includes? word.chomp
+      @list[word.chomp.alphagram] += [word.chomp] if not includes? word.chomp
       end
     end
     @keys = @list.keys.sort
@@ -56,7 +54,7 @@ class AnagramList < Hash
 
   def includes? word
     # do I use this anywhere?
-    @list[alphagram(word)].include? word
+    @list[word.alphagram].include? word
   end
 
   def save(file = @file_path)
@@ -73,18 +71,18 @@ class AnagramList < Hash
   def add(word)
     # not really sure what I could use this for, but no reason to delete it.
     # does this work?
-    @list[alphagram(word)] += [word] if not @keys.include? alphagram(word)
+    @list[word.alphagram] += [word] if not @keys.include? word.alphagram
   end
 
   def anagrams_of(word)
-    ag = alphagram(word)
+    ag = word.alphagram
     notincluded = ("abcdefghijklmnopqrstuvwxyz".split("") - ag.split("")).join
     puts notincluded
     matches = @list.keys.select { |alphagram| alphagram.count(notincluded) < 1 if alphagram != nil}
     p matches
     matches.select! { |match| match.count(ag) > ag.count(ag) }
     p matches
-#    matches.each do |match|
+#    matches.each do |match| # not working right now
 #      print @list[match]
 #    end
   end
