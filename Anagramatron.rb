@@ -2,7 +2,7 @@
 
 # Author: Cooper LeBrun
 # Email: cooperlebrun@gmail.com
-# TODO: make sure there are all methods use the string method of alphagram, and not the class method.
+# TODO: make every .each call that can use constructors, get this, use constructers. HA
 
 class String
   # Had some of these in the AnagramList class definition, moved them over here.
@@ -26,7 +26,6 @@ class AnagramList < Hash
         line = line.scan(/\w+/)
         @list[line.shift] += line
       end
-
     elsif not formatted
       # formats a file, use with save.
       # Only works on files with one word per line.
@@ -53,37 +52,31 @@ class AnagramList < Hash
   attr_accessor :file_path
 
   def includes? word
-    # do I use this anywhere?
+    # word = String
     @list[word.alphagram].include? word
   end
 
   def save(file = @file_path)
-    if file == nil
-      raise "You never defined file! use save(file = your_file_path)"
-    end
+    raise "You never defined file! use save(file = your_file_path)" if file == nil
     f = File.open(file, 'w')
-    @keys.each do |key|
-      f.write(key + " " + @list[key].join(" ") + "\n")
-    end
+    @keys.each { |key| f.write(key + " " + @list[key].join(" ") + "\n") }
     f.close
   end
 
   def add(word)
+    # word = String
     # not really sure what I could use this for, but no reason to delete it.
-    # does this work?
     @list[word.alphagram] += [word] if not @keys.include? word.alphagram
   end
 
   def anagrams_of(word)
     ag = word.alphagram
     notincluded = ("abcdefghijklmnopqrstuvwxyz".split("") - ag.split("")).join
-    puts notincluded
+#    puts notincluded # debug
     matches = @list.keys.select { |alphagram| alphagram.count(notincluded) < 1 if alphagram != nil}
-    p matches
-    matches.select! { |match| match.count(ag) > ag.count(ag) }
-    p matches
-#    matches.each do |match| # not working right now
-#      print @list[match]
-#    end
+#    p matches # debug
+    matches.select! { |match| match.count(ag) > ag.count(ag) } # count won't work. find something other way.
+#    p matches # debug
+    matches.map { |match| @list[match] } # won't be sure if this works until I fix the count problem
   end
 end
