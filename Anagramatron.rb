@@ -8,7 +8,7 @@ class String
   # Had some of these in the AnagramList class definition, moved them over here.
   def alphagram
     # an alphagram is a word rearranged so its letters are in alphabetical order. for example: aeelmpx
-    self.scan(/[A-Z, a-z]/).sort.join.downcase
+    self.scan(/[A-Z, a-z]/).join.downcase.split("").sort.join
   end
 end
 
