@@ -2,10 +2,10 @@
 
 # Author: Cooper LeBrun
 # Email: cooperlebrun@gmail.com
-# TODO: make every .each call that can use constructors, get this, use constructers. HA
+# 
 
 class String
-  # Had some of these in the AnagramList class definition, moved them over here.
+  # moved from the AnagramList definition
   def alphagram
     # an alphagram is a word rearranged so its letters are in alphabetical order. for example: aeelmpx
     self.scan(/[A-Z, a-z]/).join.downcase.split("").sort.join
@@ -35,7 +35,6 @@ class AnagramList < Hash
     end
     @keys = @list.keys.sort
   end
-
 
   def initialize(file_path = nil, format = true)
     @file_path = file_path
@@ -75,7 +74,7 @@ class AnagramList < Hash
 #    puts notincluded # debug
     matches = @list.keys.select { |alphagram| alphagram.count(notincluded) < 1 if alphagram != nil}
 #    p matches # debug
-    matches.select! { |match| match.count(ag) > ag.count(ag) } # count won't work. find something other way.
+    matches.select! { |match| ag.count(ag) > match.count(ag) } # figure count out or switch to something else.
 #    p matches # debug
     matches.map { |match| @list[match] } # won't be sure if this works until I fix the count problem
   end
