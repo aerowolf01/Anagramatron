@@ -1,16 +1,15 @@
+Written by Cooper LeBrun <cooperlebrun@gmail.com>
+
 Anagramatron.rb
 ============
-Working on it.
+A simple anagram finder. In progress, major definitions are finished, but there is still
+clean up/debugging/polishing/making it into more then class definitions ahead.
 
-
-Enable1.ana
+wwf.ana
 =======
 A formatted anagram list of the enable dictionary's word list.
+Also known as the basis for the words with friends dictionary.
 http://code.google.com/p/dotnetperls-controls/downloads/detail?name=enable1.txt
-
-
-
-
 
 Epic bug:
 you cannot use h = Hash.new([])
