@@ -71,11 +71,9 @@ class AnagramList < Hash
   def anagrams_of(word)
     ag = word.alphagram
     notincluded = ("abcdefghijklmnopqrstuvwxyz".split("") - ag.split("")).join
-#    puts notincluded # debug
     matches = @list.keys.select { |alphagram| alphagram.count(notincluded) < 1 if alphagram != nil}
-#    p matches # debug
-    matches.select! { |match| ag.count(ag) > match.count(ag) } # figure count out or switch to something else.
-#    p matches # debug
-    matches.map { |match| @list[match] } # won't be sure if this works until I fix the count problem
+    matches.select! { |match| ag.count(ag) > match.count(ag) } # still getting matches with more letters then word
+    matches.map { |match| @list[match] }
+    matches.flatten # works, see if you can combine with previous line
   end
 end
