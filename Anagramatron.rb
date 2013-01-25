@@ -2,13 +2,20 @@
 
 # Author: Cooper LeBrun
 # Email: cooperlebrun@gmail.com
-# 
+# commit notes: added letterhash
 
 class String
   # moved from the AnagramList definition
   def alphagram
     # an alphagram is a word rearranged so its letters are in alphabetical order. for example: aeelmpx
     self.scan(/[A-Z, a-z]/).join.downcase.split("").sort.join
+  end
+
+  def letterhash
+    # letter frequency in hash form
+    h = Hash.new(0)
+    self.split("").each { |l| h[l] += 1 }
+    h
   end
 end
 
@@ -70,9 +77,11 @@ class AnagramList < Hash
 
   def anagrams_of(word)
     ag = word.alphagram
+    lfreq = ag.letterhash
+    # a lot of this might not be neccasery, I did this before defining letterhash and I might readjust this completely...
     notincluded = ("abcdefghijklmnopqrstuvwxyz".split("") - ag.split("")).join
     matches = @list.keys.select { |alphagram| alphagram.count(notincluded) < 1 if alphagram != nil}
-    matches.select! { |match| ag.count(ag) > match.count(ag) } # still getting matches with more letters then word
+    matches.select! { |match|  } # still getting matches with more letters then word
     matches.map { |match| @list[match] }
     matches.flatten # works, see if you can combine with previous line
   end
