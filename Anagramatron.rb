@@ -64,21 +64,14 @@ class AnagramList < Hash
     matches = @keys.select { |key| ag.substring? key } #=> list of alphagram keys with < or = numbers of the same letters
     matches.map! { |match| @list[match] } #=> [ the values of the alphagrams from @list ]
     matches.flatten
-=begin
-    ag = word.alphagram
-    notincluded = ("abcdefghijklmnopqrstuvwxyz".split("") - ag.split("")).join
-    matches = @list.keys.select { |alphagram| alphagram.count(notincluded) < 1 if alphagram != nil }
-    matches.select! do |match|
-      match.letterfreq.each
-    end
-    matches.map! { |match| @list[match] } # it has to be map! asshole...
-    matches.flatten # works, see if you can combine with previous line
-=end
+    # should try combinations of words.
   end
+
 end
 
 class String
   # moved from the AnagramList definition
+
   def alphagram
     # an alphagram is a word rearranged so its letters are in alphabetical order. for example: aeelmpx
     self.scan(/[A-Z, a-z]/).join.downcase.split("").sort.join # is this not striping out punctuation?
@@ -91,10 +84,6 @@ class String
     h
   end
 
-#  def notincluded
-#    # yeeaaahh...
-#  end
-
   def substring? word # needs a better name
     sfreq = self.letterfreq
     word.letterfreq.each do |letter, frequency|
@@ -105,5 +94,4 @@ class String
     end
     return true
   end
-
 end
