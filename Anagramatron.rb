@@ -4,22 +4,6 @@
 # Email: cooperlebrun@gmail.com
 # commit notes: added letterhash
 
-class String
-  # moved from the AnagramList definition
-  def alphagram
-    # an alphagram is a word rearranged so its letters are in alphabetical order. for example: aeelmpx
-    self.scan(/[A-Z, a-z]/).join.downcase.split("").sort.join
-  end
-
-  def letterhash
-    # letter frequency in hash form
-    h = Hash.new(0)
-    self.split("").each { |l| h[l] += 1 }
-    h
-  end
-end
-
-
 class AnagramList < Hash
 
   def parse_file(file, formatted = false)
@@ -47,7 +31,7 @@ class AnagramList < Hash
     @file_path = file_path
     @list = Hash.new { |hash, key| hash[key] = [] } # Epic ruby bug was here, more in readme
     if (@file_path != nil) && (File.exists? @file_path)
-      parse_file(@file_path, format)
+      parse_file(@file_path, formatted = format)
     elsif @file_path != nil
       raise "#{@file_path} is not a valid file name!"
     end
@@ -75,14 +59,51 @@ class AnagramList < Hash
     @list[word.alphagram] += [word] if not @keys.include? word.alphagram
   end
 
-  def anagrams_of(word)
+  def anagram_search(word)
     ag = word.alphagram
-    lfreq = ag.letterhash
-    # a lot of this might not be neccasery, I did this before defining letterhash and I might readjust this completely...
+    matches = @keys.select { |key| ag.substring? key } #=> list of alphagram keys with < or = numbers of the same letters
+    matches.map! { |match| @list[match] } #=> [ the values of the alphagrams from @list ]
+    matches.flatten
+=begin
+    ag = word.alphagram
     notincluded = ("abcdefghijklmnopqrstuvwxyz".split("") - ag.split("")).join
-    matches = @list.keys.select { |alphagram| alphagram.count(notincluded) < 1 if alphagram != nil}
-    matches.select! { |match|  } # still getting matches with more letters then word
-    matches.map { |match| @list[match] }
+    matches = @list.keys.select { |alphagram| alphagram.count(notincluded) < 1 if alphagram != nil }
+    matches.select! do |match|
+      match.letterfreq.each
+    end
+    matches.map! { |match| @list[match] } # it has to be map! asshole...
     matches.flatten # works, see if you can combine with previous line
+=end
   end
+end
+
+class String
+  # moved from the AnagramList definition
+  def alphagram
+    # an alphagram is a word rearranged so its letters are in alphabetical order. for example: aeelmpx
+    self.scan(/[A-Z, a-z]/).join.downcase.split("").sort.join # is this not striping out punctuation?
+  end
+
+  def letterfreq
+    # letter frequency in hash form
+    h = Hash.new(0)
+    self.split("").each { |l| h[l] += 1 }
+    h
+  end
+
+#  def notincluded
+#    # yeeaaahh...
+#  end
+
+  def substring? word # needs a better name
+    sfreq = self.letterfreq
+    word.letterfreq.each do |letter, frequency|
+      if sfreq[letter] < frequency
+        return false
+        break
+      end
+    end
+    return true
+  end
+
 end
