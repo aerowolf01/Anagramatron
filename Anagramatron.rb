@@ -86,7 +86,7 @@ class String
 
   def alphagram
     # an alphagram is a word rearranged so its letters are in alphabetical order. for example: aeelmpx
-    self.downcase.scan(/[a-z]/)sort.join
+    self.downcase.scan(/[a-z]/).sort.join
   end
 
   def letterfreq
