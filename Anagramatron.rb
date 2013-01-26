@@ -36,11 +36,12 @@ class AnagramList < Hash
     @file_path = file_path
     @list = Hash.new { |hash, key| hash[key] = [] } # Hash has a bug. more in readme
     # TODO change to case syntax
-    if (@file_path != nil) && (File.exists? @file_path)
+    case
+    when (@file_path != nil) && (File.exists? @file_path)
       parse_file(@file_path, formatted = format)
-    elsif @file_path != nil
+    when @file_path != nil
       raise "#{@file_path} is nil!"
-    elsif @file_path.exists? == false
+    when @file_path.exists? == false
       raise "#{file_path} does not exist."
     end
   end
