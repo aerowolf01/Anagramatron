@@ -2,9 +2,12 @@
 
 # Author: Cooper LeBrun
 # Email: cooperlebrun@gmail.com
-# TODO def a function to spit @list.values out in a standard word list.
+
 # TODO combinations of anagram_search's results
 # TODO see if alphagram is stripping out punctuation
+# TODO get rid of initializes if/elsif nest. its ugly. and it should feel bad
+
+# should I make a twitter bot for this?
 
 class AnagramList < Hash
 
@@ -14,7 +17,7 @@ class AnagramList < Hash
     # obviously the above example's matches weren't actually matches, but you get the idea
 
     if formatted
-      # only works with files that have been saved after using this with formatted = false
+      # only works with files that have been saved using the #save method
       File.open(file).read.each_line do |line|
         line = line.scan(/\w+/)
         @list[line.shift] += line
@@ -32,6 +35,7 @@ class AnagramList < Hash
   def initialize(file_path = nil, format = true)
     @file_path = file_path
     @list = Hash.new { |hash, key| hash[key] = [] } # Hash has a bug. more in readme
+    # TODO change to case syntax
     if (@file_path != nil) && (File.exists? @file_path)
       parse_file(@file_path, formatted = format)
     elsif @file_path != nil
@@ -41,12 +45,10 @@ class AnagramList < Hash
     end
   end
   
-=begin
-  # useless?
+  # some debug stuff
   attr_reader :keys
   attr_reader :list
   attr_accessor :file_path
-=end
 
   def includes? word
     # word = String
@@ -54,19 +56,21 @@ class AnagramList < Hash
   end
 
   def save(file = @file_path)
-    raise "You never defined file! use save(file = your_file_path)" if file == nil
+    raise "file is undefined" if file == nil
     f = File.open(file, 'w')
     @keys.each { |key| f.write(key + " " + @list[key].join(" ") + "\n") }
     f.close
   end
 
-#  def save_as_wordlist(file) # you really need better names for this stuff
-#
-#  end
+  def wordlist_save(file)
+    raise "file is undefined" if file == nil
+    f = File.open(file, 'w')
+    @list.values.flatten.each { |v| f.write("#{v}\n") }
+    f.close
+  end
 
   def add(word)
-    # word = String
-    # not really sure what I could use this for, but no reason to delete it.
+    # useless?
     @list[word.alphagram] += [word] if not @keys.include? word.alphagram
   end
 
@@ -80,7 +84,6 @@ class AnagramList < Hash
 end
 
 class String
-  # moved from the AnagramList definition
 
   def alphagram
     # an alphagram is a word rearranged so its letters are in alphabetical order. for example: aeelmpx
