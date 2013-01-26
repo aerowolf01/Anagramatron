@@ -5,7 +5,6 @@
 
 # TODO combinations of anagram_search's results
 # TODO see if alphagram is stripping out punctuation
-# TODO get rid of initializes if/elsif nest. its ugly. and it should feel bad
 
 # should I make a twitter bot for this?
 
@@ -35,7 +34,6 @@ class AnagramList < Hash
   def initialize(file_path = nil, format = true)
     @file_path = file_path
     @list = Hash.new { |hash, key| hash[key] = [] } # Hash has a bug. more in readme
-    # TODO change to case syntax
     case
     when (@file_path != nil) && (File.exists? @file_path)
       parse_file(@file_path, formatted = format)

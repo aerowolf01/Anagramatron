@@ -3,6 +3,9 @@ Written by Cooper LeBrun <cooperlebrun@gmail.com>
 Anagramatron.rb
 ============
 It is actually functional now, but I need to make it usable.
+mostly cleaning right now, I will get to making it usable soon.
+
+
 
 wwf.ana
 =======
