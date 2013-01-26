@@ -4,7 +4,6 @@
 # Email: cooperlebrun@gmail.com
 
 # TODO combinations of anagram_search's results
-# TODO see if alphagram is stripping out punctuation
 
 # should I make a twitter bot for this?
 
@@ -90,7 +89,6 @@ class String
   end
 
   def letterfreq
-    # letter frequency in hash form
     h = Hash.new(0)
     self.split("").each { |l| h[l] += 1 } #=> h = { 'w' => 1, 'o' => 1, 'r' => 1, ... }
     h
