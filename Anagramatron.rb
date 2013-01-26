@@ -86,7 +86,7 @@ class String
 
   def alphagram
     # an alphagram is a word rearranged so its letters are in alphabetical order. for example: aeelmpx
-    self.scan(/[A-Z, a-z]/).join.downcase.split("").sort.join # I don't think this is actually striping punctuation
+    self.downcase.scan(/[a-z]/)sort.join
   end
 
   def letterfreq
