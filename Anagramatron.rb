@@ -14,17 +14,18 @@ class AnagramList < Hash
     # "alphagram and a space in between each word which has a matching alphagram"
     # obviously the above example's matches weren't actually matches, but you get the idea
 
-    if formatted
-      # only works with files that have been saved using the #save method
-      File.open(file).read.each_line do |line|
-        line = line.scan(/\w+/)
-        @list[line.shift] += line
-      end
-    elsif not formatted
-      # formats a file, use with save.
-      # Only works on files with one word per line
-    File.open(file).read.each_line do |word|
-      @list[word.chomp.alphagram] += [word.chomp] if not includes? word.chomp
+    case
+      when formatted
+        # only works with files that have been saved using the #save method
+        File.open(file).read.each_line do |line|
+          line = line.scan(/\w+/)
+          @list[line.shift] += line
+        end
+      when not formatted
+        # formats a file, use with save.
+        # Only works on files with one word per line
+      File.open(file).read.each_line do |word|
+        @list[word.chomp.alphagram] += [word.chomp] if not includes? word.chomp
       end
     end
     @keys = @list.keys.sort
@@ -34,12 +35,12 @@ class AnagramList < Hash
     @file_path = file_path
     @list = Hash.new { |hash, key| hash[key] = [] } # Hash has a bug. more in readme
     case
-    when (@file_path != nil) && (File.exists? @file_path)
-      parse_file(@file_path, formatted = format)
-    when @file_path != nil
-      raise "#{@file_path} is nil!"
-    when @file_path.exists? == false
-      raise "#{file_path} does not exist."
+      when (@file_path != nil) && (File.exists? @file_path)
+        parse_file(@file_path, formatted = format)
+      when @file_path != nil
+        raise "#{@file_path} is nil!"
+      when @file_path.exists? == false
+        raise "#{file_path} does not exist."
     end
   end
   
@@ -49,7 +50,6 @@ class AnagramList < Hash
   attr_accessor :file_path
 
   def includes? word
-    # word = String
     @list[word.alphagram].include? word
   end
 
@@ -74,9 +74,9 @@ class AnagramList < Hash
 
   def anagram_search(word)
     ag = word.alphagram
-    matches = @keys.select { |key| ag.substring? key } #=> list of alphagram keys with < or = numbers of the same letters
+    matches = @keys.select { |key| ag.is_compat? key } #=> list of alphagram keys with < or = numbers of the same letters
     matches.map! { |match| @list[match] } #=> [ the values of the alphagrams from @list ]
-    matches.flatten
+    matches.flatten.sort_by(&:length).reverse
   end
 
 end
@@ -94,7 +94,7 @@ class String
     h
   end
 
-  def substring? word # name is a bit misleading
+  def is_compat? word
     # counts letters in self, makes sure word doesn't have more letters.
     # returns bool, intended to use with #select
     sfreq = self.letterfreq
@@ -106,4 +106,5 @@ class String
     end
     return true
   end
+
 end
