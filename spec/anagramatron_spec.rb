@@ -3,23 +3,9 @@ require_relative '../anagramatron'
 class Dictionary; end
 
 describe Anagrams do
-  context 'with a dictionary' do
-    
-    it "returns (only) 'rom' as an anagram of 'mor'" do 
-      @dict = double("Dictionary", :search => 'rom')
-      @atron = Anagrams.new(@dict)
-      @atron.for('mor').should == 'rom'
-    end
-
-    it "returns (only) 'gut' as an anagram of 'tug'" do
-      @dict = double("Dictionary", :search => 'gut')
-      @atron = Anagrams.new(@dict)
-      @atron.for('tug').should == 'gut'
-    end
-  end
 
   # rename describe block
-  describe 'non-instance methods' do
+  describe 'self.mutations_for' do
     it "will make correct permutations of 'mor'" do
       @a = Anagrams.mutations_for "mor"
       @a.should =~ ['orm', 'omr', 'mro', 'rom', 'rmo']
