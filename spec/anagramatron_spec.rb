@@ -11,7 +11,10 @@ describe Anagrams do
     @a.should =~ ['odm', 'omd', 'mdo', 'dom', 'dmo']
   end
 
-  it "won't do words longer then 13 characters"
+  it "won't do words longer then 9 characters" do
+    expect { Anagrams.of "1234567890" }.to raise_error
+    expect { Anagrams.of "123456789" }.not_to raise_error
+  end
 end
 
 describe Dictionary do
