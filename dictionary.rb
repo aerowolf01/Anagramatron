@@ -2,14 +2,18 @@ class Dictionary
 
   attr_reader :dict
 
-  def initialize(args = {:file => false, :words => []})
-    @dict = args[:words] if args[:words]
+  def initialize source
+    # what if file and words?
+    if source.class == Array
+      @dict = source
+    elsif File.exists? source
+      @dict = File.read(source).split("\n")
+    else 
+      raise 'Invalid Source!'
+    end
   end
 
   def matching_words words
-    # this loop is an abomination :(
-    words.each do |word|
-      @dict.select { |entry| entry == word }
-    end
+    words.select { |word| @dict.include? word }
   end
 end
